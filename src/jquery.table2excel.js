@@ -42,14 +42,25 @@
             e.tableRows = [];
 
             // get contents of table except for exclude
-            $(e.element).each( function(i,o) {
-                var tempRows = "";
-                $(o).find("tr").not(e.settings.exclude).each(function (i,o) {
-                    tempRows += "<tr>" + $(o).html() + "</tr>";
-                });
-                e.tableRows.push(tempRows);
-            });
+            $(e.element).each(function (i, table) {
 
+                $(table).find("thead, tbody").not(e.settings.exclude).each(function (i, tbody) {
+                    var tempRows = "";
+
+                    $(tbody).find("tr").not(e.settings.exclude).each(function (i, tr) {
+                        tempRows += "<tr>";
+
+                        $(tr).find("th, td").not(e.settings.exclude).each(function (i, td) {
+                            tempRows += "<td>" + $(td).html() + "</td>";
+                        });
+
+                        tempRows += "</tr>";
+                    });
+
+                    e.tableRows.push(tempRows);
+                });
+
+            });
             e.tableToExcel(e.tableRows, e.settings.name);
         },
 
